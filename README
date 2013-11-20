@@ -129,3 +129,4 @@ getPropertyVar <variable> [name|section.name]
 
   Returns 0 (true) if property found otherwise 1 (false)
 
+
