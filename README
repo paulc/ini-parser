@@ -114,7 +114,7 @@ listAll
 listSection <section=none>
 
   List keys and data for given section (sepcified as $1) in format
-  "<property> <value>",if will list all sections when section parameter was empty
+  "<property> <value>",if will list all sections when section parameter empty
 
 getProperty [name|section.name]
 
