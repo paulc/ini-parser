@@ -80,6 +80,10 @@ $ listSection section1
 section1.abc def
 section1.ghi jkl
 
+$listSection 
+section1
+section2
+
 $ getProperty global
 a global value
 
@@ -107,10 +111,10 @@ listAll
 
   List keys and data in format "<section>.<property> <value>"
 
-listSection <section>
+listSection <section=none>
 
   List keys and data for given section (sepcified as $1) in format
-  "<property> <value>"
+  "<property> <value>",if will list all sections when section parameter was empty
 
 getProperty [name|section.name]
 
