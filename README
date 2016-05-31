@@ -8,20 +8,20 @@ The INI file format supports the following features:
 
 Sections:   [section]
 Properties: name=value
-Comments:   ; comment 
+Comments:   ; comment
             # comment
 
-Blank lines and trailing writespace are ignored as is whitespace around 
-the '=' - ie. 
+Blank lines and trailing writespace are ignored as is whitespace around
+the '=' - ie.
 
    name  =  value
 
-is equivalent to 
+is equivalent to
 
    name=value
 
-Whitespace and quotes within a value are preserved (though values don't 
-in general need to be quoted and will not be subject to shell parameter 
+Whitespace and quotes within a value are preserved (though values don't
+in general need to be quoted and will not be subject to shell parameter
 splitting)
 
 Values can be continuted onto subsequent lines if these are prefixed with
@@ -30,7 +30,7 @@ whitespace - ie.
    name=line1
         line2
 
-is equivalent to: 
+is equivalent to:
 
    name = line1 line2
 
@@ -39,7 +39,7 @@ keys in the format "<section>.<name>" (properties without an associated
 section are stored as ".<name>". In most cases this is transparent as the
 list/get commands can be used to query the data
 
-The functionality is more or less equivalent to the Python ConfigParser 
+The functionality is more or less equivalent to the Python ConfigParser
 module with the following exceptions
 
 - Properties are allowed outside sections
@@ -70,6 +70,10 @@ section1.abc
 section1.ghi
 section2.xyz
 
+$ listKeys section1
+section1.abc
+section1.ghi
+
 $ listAll
 .global a global value
 section1.abc def
@@ -79,6 +83,10 @@ section2.xyz abc def
 $ listSection section1
 section1.abc def
 section1.ghi jkl
+
+$listSection
+section1
+section2
 
 $ getProperty global
 a global value
@@ -99,7 +107,7 @@ parseIniFile < file
 
   Parse ini file (reads from stdin) and saves data to global _CONFIG var
 
-listKeys
+listKeys <section=none>
 
   List keys present in config file in format "<section>.<property>"
 
@@ -107,14 +115,14 @@ listAll
 
   List keys and data in format "<section>.<property> <value>"
 
-listSection <section>
+listSection <section=none>
 
   List keys and data for given section (sepcified as $1) in format
-  "<property> <value>"
+  "<property> <value>",if will list all sections when section parameter empty
 
 getProperty [name|section.name]
 
-  Print value for given property (sepcified as $1) 
+  Print value for given property (sepcified as $1)
   Properties without a section can be queried directly as
   "name" (rather than ".name")
 
@@ -122,11 +130,9 @@ getProperty [name|section.name]
 
 getPropertyVar <variable> [name|section.name]
 
-  Save value for given property (sepcified as $2) 
+  Save value for given property (sepcified as $2)
   into shell variable (specified as $1)
   Properties without a section can be queried directly as
   "name" (rather than ".name")
 
   Returns 0 (true) if property found otherwise 1 (false)
-
-
