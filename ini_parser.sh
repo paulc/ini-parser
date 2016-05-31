@@ -97,6 +97,7 @@
 shopt -s extglob
 
 _CONFIG=()
+_SECTION=()
 
 # Commands
 # --------
@@ -134,6 +135,7 @@ function parseIniFile() {
             if [[ $LINE =~ ^\[([[:alnum:]]+)\] ]]       # Section
             then
                 SECTION=${BASH_REMATCH[1]}
+                _SECTION=(${_SECTION[@]} "${SECTION}")
                 KEY=""
             elif [[ $LINE =~ ^([^[:space:]]+)[[:space:]]*=[[:space:]]*(.+) ]] # Property
             then 
@@ -184,13 +186,21 @@ function listAll() {
 function listSection() {
     local -i i
     local SECTION=$1
-    for ((i=0; i<${#_CONFIG[@]}; i+=2))
-    do
-        if [[ ${_CONFIG[$i]} =~ ^${SECTION}\.(.+) ]]
-        then
-            echo ${_CONFIG[i]} ${_CONFIG[((i+1))]}
-        fi
-    done
+    if [[ -n ${SECTION} ]]
+    then
+        for ((i=0; i<${#_CONFIG[@]}; i+=2))
+        do
+            if [[ ${_CONFIG[$i]} =~ ^${SECTION}\.(.+) ]]
+            then
+                echo ${_CONFIG[i]} ${_CONFIG[((i+1))]}
+            fi
+        done
+    else
+        for ((i=0; i<${#_SECTION[@]}; i++))
+        do
+            echo ${_SECTION[i]}
+        done
+    fi
 }
 
 # getProperty [name|section.name]
@@ -244,20 +254,21 @@ function getPropertyVar() {
 
 function testIniParser() {
     echo $ parseIniFile \< test/t2.ini
-    parseIniFile < test/t2.ini
+    parseIniFile <  ./test/t2.ini
     echo $ listKeys
     listKeys
     echo $ listAll
     listAll
     echo $ listSection section1
-    listSection section1
-    echo $ getProperty global
-    getProperty global
-    echo $ getProperty section2.xyz
-    getProperty section2.xyz
+    listSection 
+    echo $ getProperty abc
+    getProperty abc
+    echo $ getProperty section1.abc
+    getProperty section1.abc
     echo $ getPropertyVar XYZ section2.xyz \&\& echo OK
     getPropertyVar XYZ section2.xyz && echo OK
     echo $ echo ">\${XYZ}<"
     echo ">${XYZ}<"
 }
 
+testIniParser
